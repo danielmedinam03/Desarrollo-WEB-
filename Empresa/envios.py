@@ -27,6 +27,46 @@ def Tablas():
 def Genero():
 
     if request.method == "POST":
+        select = "SELECT cCodigoGenero FROM Genero"
+        cursor = conexion.cursor()
+        cursor.execute(select)
+
+        valores = cursor.fetchall()
+        codGenero=request.form['codGenero'].capitalize()
+        desGenero=request.form['desGenero'].capitalize()
+
+        if valores.__len__==0:
+            cursor = conexion.cursor()
+
+            insert="INSERT INTO Genero(cCodigoGenero, cDescripcionGenero) VALUES('{}','{}')".format(codGenero, desGenero)
+            cursor.execute(insert)
+            cursor.commit()
+            return redirect(url_for('Genero'))
+        else:
+            flash("Ya existe el Codigo")
+            return redirect(url_for('Genero'))
+        
+    return render_template("genero.html")
+
+@app.route('/estadoCivil',methods=["GET","POST"])
+def EstadoCivil():
+    
+    if request.method == "POST":
+        codEstado=request.form['codEstado'].capitalize()
+        desEstado=request.form['desEstado'].capitalize()
+        print(codEstado, desEstado)
+        cursor = conexion.cursor()
+        insert="INSERT INTO Genero(cCodigoGenero, cDescripcionGenero) VALUES('{}','{}')".format(codEstado, desEstado)
+        cursor.execute(insert)
+        cursor.commit()
+        return redirect(url_for('EstadoCivil'))
+    
+    return render_template("estadoCivil.html")
+
+@app.route('/estrato', methods=["GET","POST"])
+def Estrato():
+    
+    if request.method == "POST":
         codGenero=request.form['codGenero'].capitalize()
         desGenero=request.form['desGenero'].capitalize()
         print(codGenero, desGenero)
@@ -35,23 +75,37 @@ def Genero():
         cursor.execute(insert)
         cursor.commit()
         return redirect(url_for('Genero'))
-
-    return render_template("genero.html")
-
-@app.route('/estadoCivil',methods=["GET","POST"])
-def EstadoCivil():
-    return render_template("estadoCivil.html")
-
-@app.route('/estrato', methods=["GET","POST"])
-def Estrato():
+    
     return render_template("estrato.html")
 
 @app.route('/formaDePago', methods=["GET","POST"])
 def FormaDePago():
+    
+    if request.method == "POST":
+        codGenero=request.form['codGenero'].capitalize()
+        desGenero=request.form['desGenero'].capitalize()
+        print(codGenero, desGenero)
+        cursor = conexion.cursor()
+        insert="INSERT INTO Genero(cCodigoGenero, cDescripcionGenero) VALUES('{}','{}')".format(codGenero, desGenero)
+        cursor.execute(insert)
+        cursor.commit()
+        return redirect(url_for('Genero'))
+    
     return render_template("formaDePago.html")
 
 @app.route('/tiposDeID', methods=["GET","POST"])
 def TiposID():
+    
+    if request.method == "POST":
+        codGenero=request.form['codGenero'].capitalize()
+        desGenero=request.form['desGenero'].capitalize()
+        print(codGenero, desGenero)
+        cursor = conexion.cursor()
+        insert="INSERT INTO Genero(cCodigoGenero, cDescripcionGenero) VALUES('{}','{}')".format(codGenero, desGenero)
+        cursor.execute(insert)
+        cursor.commit()
+        return redirect(url_for('Genero'))
+    
     return render_template("tiposDeID.html")
 
     
