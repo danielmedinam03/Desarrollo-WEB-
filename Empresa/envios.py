@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect, url_for
 import os
 import pyodbc
 
@@ -25,21 +25,17 @@ def Tablas():
 
 @app.route('/genero', methods=["GET","POST"])
 def Genero():
-    
-    codGenero = request.args.get("codGenero")
-    desGenero = request.args.get("desGenero")
 
-    #codGenero=(request.form['codGenero'])
-    #desGenero=(request.form['desGenero'])
-    print(codGenero, desGenero)
-    
-    insert="INSERT INTO Genero(cCodigoGenero, cDescripcionGenero) VALUES('{}','{}')".format(codGenero, desGenero)
-    cursor = conexion.cursor()
-    cursor.execute(insert)
-    cursor.commit()
-    
     if request.method == "POST":
-        return render_template("genero.html")
+        codGenero=request.form['codGenero'].capitalize()
+        desGenero=request.form['desGenero'].capitalize()
+        print(codGenero, desGenero)
+        cursor = conexion.cursor()
+        insert="INSERT INTO Genero(cCodigoGenero, cDescripcionGenero) VALUES('{}','{}')".format(codGenero, desGenero)
+        cursor.execute(insert)
+        cursor.commit()
+        return redirect(url_for('Genero'))
+
     return render_template("genero.html")
 
 @app.route('/estadoCivil',methods=["GET","POST"])
