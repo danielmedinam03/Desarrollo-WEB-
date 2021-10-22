@@ -1,12 +1,23 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
 import os
 import pyodbc
+import mysql.connector
+from mysql import connector
 
 #instancia de flask
 app = Flask(__name__)
 
+conexion = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  password="dfmm03112002",
+  database="videojuegos"
+)
+
+
 # Ruta actual de la carpeta donde se esta trabajando
 # Conexion a la BD
+"""
 ruta = os.getcwd()
 
 cadenaRutaBD = ruta + '\BD\EmpresaBD.accdb;'
@@ -14,6 +25,10 @@ driver = "Microsoft Access Driver (*.mdb, *.accdb)"
 cadena = (r'DRIVER={};DBQ={}').format(driver, cadenaRutaBD)
 
 conexion = pyodbc.connect(cadena)
+
+secret_key = "secretkey"
+
+"""
 
 @app.route('/', methods=["GET","POST"])
 def Index():
@@ -25,27 +40,30 @@ def Tablas():
 
 @app.route('/genero', methods=["GET","POST"])
 def Genero():
-
     if request.method == "POST":
-        select = "SELECT cCodigoGenero FROM Genero"
-        cursor = conexion.cursor()
-        cursor.execute(select)
-
-        valores = cursor.fetchall()
         codGenero=request.form['codGenero'].capitalize()
         desGenero=request.form['desGenero'].capitalize()
-
-        if valores.__len__==0:
-            cursor = conexion.cursor()
-
-            insert="INSERT INTO Genero(cCodigoGenero, cDescripcionGenero) VALUES('{}','{}')".format(codGenero, desGenero)
-            cursor.execute(insert)
-            cursor.commit()
-            return redirect(url_for('Genero'))
-        else:
-            flash("Ya existe el Codigo")
+        
+        if codGenero=="":
             return redirect(url_for('Genero'))
         
+        cursor = conexion.cursor()
+        select = "SELECT cod_Genero FROM genero WHERE cod_Genero = '{}'".format(codGenero)
+        cursor.execute(select)
+        valores = cursor.fetchall()
+        validacion = valores.__len__()
+        
+        if validacion==0:
+            cursor = conexion.cursor()
+
+            insert="INSERT INTO genero(cod_Genero, des_Genero) VALUES('{}','{}')".format(codGenero, desGenero)
+            cursor.execute(insert)
+            conexion.commit()
+            cursor.close()
+        else:
+            #flash('You were successfully logged in')
+            return redirect(url_for('Tablas'))   
+             
     return render_template("genero.html")
 
 @app.route('/estadoCivil',methods=["GET","POST"])
