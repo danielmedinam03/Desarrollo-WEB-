@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
 import os
-import pyodbc
+#import pyodbc
 import mysql.connector
 from mysql import connector
 
@@ -80,7 +80,6 @@ def EstadoCivil():
         return redirect(url_for('EstadoCivil'))
     
     return render_template("estadoCivil.html")
-
 @app.route('/estrato', methods=["GET","POST"])
 def Estrato():
     
